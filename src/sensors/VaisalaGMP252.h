@@ -47,6 +47,7 @@
 // Included Dependencies
 #include "sensors/VaisalaParent.h"
 
+
 // Sensor Specific Defines
 /** @ingroup sensor_gmp252 */
 /**@{*/
