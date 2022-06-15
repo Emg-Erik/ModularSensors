@@ -137,9 +137,9 @@ class VaisalaParent : public Sensor {
     VaisalaParent(byte modbusAddress, Stream* stream, int8_t powerPin,
                      int8_t powerPin2, int8_t enablePin = -1,
                      uint8_t         measurementsToAverage = 1,
-                     vaisalaModel model                 = GMP252,
+                     vaisalaModel model                 = 0,
                      const char*     sensName = "Vaisala-Sensor",
-                     uint8_t numVariables = 2, uint32_t warmUpTime_ms = 1500, TODO check number of variables
+                     uint8_t numVariables = 2, uint32_t warmUpTime_ms = 1500,
                      uint32_t stabilizationTime_ms = 120000,
                      uint32_t measurementTime_ms   = 2000);
     /**
@@ -148,7 +148,7 @@ class VaisalaParent : public Sensor {
     VaisalaParent(byte modbusAddress, Stream& stream, int8_t powerPin,
                      int8_t powerPin2, int8_t enablePin = -1,
                      uint8_t         measurementsToAverage = 1,
-                     vaisalaModel model                 = GMP252,
+                     vaisalaModel model                 = 0,
                      const char*     sensName = "Vaisala-Sensor",
                      uint8_t numVariables = 2, uint32_t warmUpTime_ms = 1500,
                      uint32_t stabilizationTime_ms = 120000,
@@ -200,10 +200,10 @@ class VaisalaParent : public Sensor {
  private:
     vaisala      _vsensor;
     vaisalaModel _model;
-    byte            _modbusAddress;
-    Stream*         _stream;
-    int8_t          _RS485EnablePin;
-    int8_t          _powerPin2;
+    byte         _modbusAddress;
+    Stream*      _stream;
+    int8_t       _RS485EnablePin;
+    int8_t       _powerPin2;
 };
 
 #endif  // SRC_SENSORS_VAISALAPARENT_H_

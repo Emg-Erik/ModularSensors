@@ -6,7 +6,6 @@
  * @brief Implements the Vaisala Parent class.
  */
 
-#include "VaisalaParent.h"
 
 #include "VaisalaParent.h"
 
@@ -14,7 +13,7 @@
 // data, and number of readings to average
 VaisalaParent::VaisalaParent(
     byte modbusAddress, Stream* stream, int8_t powerPin, int8_t powerPin2,
-    int8_t enablePin, uint8_t measurementsToAverage,vaisalaModel model,
+    int8_t enablePin, uint8_t measurementsToAverage, vaisalaModel model,
     const char* sensName, uint8_t numVariables, uint32_t warmUpTime_ms,
     uint32_t stabilizationTime_ms, uint32_t measurementTime_ms)
     : Sensor(sensName, numVariables, warmUpTime_ms, stabilizationTime_ms,
@@ -24,7 +23,7 @@ VaisalaParent::VaisalaParent(
       _RS485EnablePin(enablePin), _powerPin2(powerPin2) {}
 VaisalaParent::VaisalaParent(
     byte modbusAddress, Stream& stream, int8_t powerPin, int8_t powerPin2,
-    int8_t enablePin, uint8_t measurementsToAverage,vaisalaModel model,
+    int8_t enablePin, uint8_t measurementsToAverage, vaisalaModel model,
     const char* sensName, uint8_t numVariables, uint32_t warmUpTime_ms,
     uint32_t stabilizationTime_ms, uint32_t measurementTime_ms)
     : Sensor(sensName, numVariables, warmUpTime_ms, stabilizationTime_ms,
