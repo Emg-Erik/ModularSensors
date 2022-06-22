@@ -47,7 +47,6 @@
 // Included Dependencies
 #include "sensors/VaisalaParent.h"
 
-
 // Sensor Specific Defines
 /** @ingroup sensor_gmp252 */
 /**@{*/
@@ -66,14 +65,14 @@
  *
  * 12 sec to start deliver values
  */
-#define GMP252_WARM_UP_TIME_MS 12000
+#define GMP252_WARM_UP_TIME_MS 4000
 /**
- * @brief Sensor::_stabilizationTime_ms; GMP252 is stable after 120s.
+ * @brief Sensor::_stabilizationTime_ms; GMP252 is stable after 120s. TODO Make it 20 min?
  *
  * warmup+stabilization > 120 s for consecutive readings to give different
  * results
  */
-#define GMP252_STABILIZATION_TIME_MS 120000
+#define GMP252_STABILIZATION_TIME_MS 840000
 /**
  * @brief Sensor::_measurementTime_ms; GMP252 take ~4s (4000ms) to complete a
  * measurement. TODO Check measurment time.
@@ -81,7 +80,7 @@
  * Could potentially be lower with a longer stabilization time; more testing
  * needed.
  */
-#define GMP252_MEASUREMENT_TIME_MS 4000
+#define GMP252_MEASUREMENT_TIME_MS 2000
 /**@}*/
 
 /**
@@ -110,7 +109,7 @@
 /// "partPerMillion" (ppm)
 #define GMP252_CO2_UNIT_NAME "partPerMillion"
 /// @brief Default variable short code; "GMP252carbonDioxid"
-#define GMP252_CO2_DEFAULT_CODE "GMP252carbonDioxid"
+#define GMP252_CO2_DEFAULT_CODE "GMP252carbonDioxide"
 /**@}*/
 
 /**
@@ -176,7 +175,7 @@ class VaisalaGMP252 : public VaisalaParent {
                    int8_t powerPin2 = -1, int8_t enablePin = -1,
                    uint8_t measurementsToAverage = 1)
         : VaisalaParent(modbusAddress, stream, powerPin, powerPin2,
-                           enablePin, measurementsToAverage, vaisalaModel model,
+                           enablePin, measurementsToAverage, GMP252_vaisalaModel,
                            "VaisalaGMP252", GMP252_NUM_VARIABLES,
                            GMP252_WARM_UP_TIME_MS, GMP252_STABILIZATION_TIME_MS,
                            GMP252_MEASUREMENT_TIME_MS) {}
@@ -187,7 +186,7 @@ class VaisalaGMP252 : public VaisalaParent {
                    int8_t powerPin2 = -1, int8_t enablePin = -1,
                    uint8_t measurementsToAverage = 1)
         : VaisalaParent(modbusAddress, stream, powerPin, powerPin2,
-                           enablePin, measurementsToAverage, vaisalaModel model,
+                           enablePin, measurementsToAverage, GMP252_vaisalaModel,
                            "VaisalaGMP252", GMP252_NUM_VARIABLES,
                            GMP252_WARM_UP_TIME_MS, GMP252_STABILIZATION_TIME_MS,
                            GMP252_MEASUREMENT_TIME_MS) {}

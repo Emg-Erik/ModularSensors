@@ -6,6 +6,7 @@
  * @brief Implements the Vaisala Parent class.
  */
 
+#include "VaisalaParent.h"
 
 #include "VaisalaParent.h"
 
@@ -13,7 +14,7 @@
 // data, and number of readings to average
 VaisalaParent::VaisalaParent(
     byte modbusAddress, Stream* stream, int8_t powerPin, int8_t powerPin2,
-    int8_t enablePin, uint8_t measurementsToAverage, vaisalaModel model,
+    int8_t enablePin, uint8_t measurementsToAverage,vaisalaModel model,
     const char* sensName, uint8_t numVariables, uint32_t warmUpTime_ms,
     uint32_t stabilizationTime_ms, uint32_t measurementTime_ms)
     : Sensor(sensName, numVariables, warmUpTime_ms, stabilizationTime_ms,
@@ -23,7 +24,7 @@ VaisalaParent::VaisalaParent(
       _RS485EnablePin(enablePin), _powerPin2(powerPin2) {}
 VaisalaParent::VaisalaParent(
     byte modbusAddress, Stream& stream, int8_t powerPin, int8_t powerPin2,
-    int8_t enablePin, uint8_t measurementsToAverage, vaisalaModel model,
+    int8_t enablePin, uint8_t measurementsToAverage,vaisalaModel model,
     const char* sensName, uint8_t numVariables, uint32_t warmUpTime_ms,
     uint32_t stabilizationTime_ms, uint32_t measurementTime_ms)
     : Sensor(sensName, numVariables, warmUpTime_ms, stabilizationTime_ms,
@@ -51,13 +52,13 @@ bool VaisalaParent::setup(void) {
     if (_powerPin2 >= 0) pinMode(_powerPin2, OUTPUT);
 
 #ifdef MS_VAISALAPARENT_DEBUG_DEEP
-    _ysensor.setDebugStream(&DEEP_DEBUGGING_SERIAL_OUTPUT);
+    _vsensor.setDebugStream(&DEEP_DEBUGGING_SERIAL_OUTPUT);
 #endif
 
     // This sensor begin is just setting more pin modes, etc, no sensor power
     // required This realy can't fail so adding the return value is just for
     // show
-    retVal &= _ysensor.begin(_model, _modbusAddress, _stream, _RS485EnablePin);
+    retVal &= _vsensor.begin(_model, _modbusAddress, _stream, _RS485EnablePin);
 
     return retVal;
 }
@@ -117,15 +118,15 @@ void VaisalaParent::powerDown(void) {
 
 bool VaisalaParent::addSingleMeasurementResult(void) {
     bool success = false;
-
+    
+    // Initialize float variables
+    int CO2Value_ppm  = -9999;
+    float sensorTemperatureValueC  = -9999;
+    
     // Check a measurement was *successfully* started (status bit 6 set)
     // Only go on to get a result if it was
     if (bitRead(_sensorStatus, 6)) {
         
-        // Initialize float variables
-        int CO2Value_ppm  = -9999;
-        float sensorTemperatureValueC  = -9999;
-
         // Get Values
         MS_DBG(F("Get Values from"), getSensorNameAndLocation());
         success = _vsensor.getValues(CO2Value_ppm, sensorTemperatureValueC);
@@ -137,15 +138,15 @@ bool VaisalaParent::addSingleMeasurementResult(void) {
         MS_DBG(F(" CO2-value_ppm:"), CO2Value_ppm);
         MS_DBG(F("  Temp_C:"), sensorTemperatureValueC);
 
-
-        // Put values into the array
-        verifyAndAddMeasurementResult(0, CO2Value_ppm);
-        verifyAndAddMeasurementResult(1, sensorTemperatureValueC);            
-        
+  
     } else {
         MS_DBG(getSensorNameAndLocation(), F("is not currently measuring!"));
     }
-
+    
+    // Put values into the array
+    verifyAndAddMeasurementResult(0, CO2Value_ppm);
+    verifyAndAddMeasurementResult(1, sensorTemperatureValueC);            
+    
     // Unset the time stamp for the beginning of this measurement
     _millisMeasurementRequested = 0;
     // Unset the status bits for a measurement request (bits 5 & 6)
