@@ -34,7 +34,7 @@
 
 // Bring in the libraries to handle the processor sleep/standby modes
 // The SAMD library can also the built-in clock on those modules
-#if defined(ARDUINO_ARCH_SAMD)
+#if defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_SAMD_ZERO)
 #include <RTCZero.h>
 #include "WatchDogs/WatchDogSAMD.h"
 #elif defined(ARDUINO_ARCH_AVR) || defined(__AVR__)
@@ -386,44 +386,45 @@ class Logger {
     /**
      * @brief The logger id
      */
-    const char* _loggerID;
+    const char* _loggerID = "MyLogger";
     /**
      * @brief The logging interval in minutes
      */
-    uint16_t _loggingIntervalMinutes;
+    uint16_t _loggingIntervalMinutes = 5;
     /**
      * @brief Digital pin number on the mcu controlling the SD card slave
      * select.
      */
-    int8_t _SDCardSSPin;
+    int8_t _SDCardSSPin = -1;
     /**
      * @brief Digital pin number on the mcu controlling SD card power
      */
-    int8_t _SDCardPowerPin;
+    int8_t _SDCardPowerPin = -1;
     /**
      * @brief Digital pin number on the mcu receiving interrupts to wake from
      * deep-sleep.
      */
-    int8_t _mcuWakePin;
+    int8_t _mcuWakePin = -1;
     /**
      * @brief Digital pin number on the mcu used to output an alert that the
      * logger is measuring.
      *
      * Expected to be connected to a LED.
      */
-    int8_t _ledPin;
+    int8_t _ledPin = -1;
     /**
      * @brief Digital pin number on the mcu receiving interrupts to enter
      * testing mode.
      *
      * Expected to be connected to a user button.
      */
-    int8_t _buttonPin;
+    int8_t _buttonPin = -1;
 
     /**
      * @brief The sampling feature UUID
      */
-    const char* _samplingFeatureUUID;
+    const char* _samplingFeatureUUID = nullptr;
+    // ^^ Start with no feature UUID
     /**@}*/
 
     // ===================================================================== //
@@ -581,8 +582,8 @@ class Logger {
      * it is possible for no modem to be attached (and thus the pointer could be
      * null).  It is not possible to have a null reference.
      */
-    loggerModem* _logModem;
-    //
+    loggerModem* _logModem = nullptr;
+    // ^^ Start with no modem attached
 
     /**
      * @brief An array of all of the attached data publishers
@@ -676,7 +677,7 @@ class Logger {
 // This gets the current epoch time (unix time, ie, the number of seconds
 // from January 1, 1970 00:00:00 UTC) and corrects it for the specified time
 // zone
-#if defined(ARDUINO_ARCH_SAMD)
+#if defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_SAMD_ZERO)
     /**
      * @brief The RTC object.
      *
@@ -868,7 +869,7 @@ class Logger {
      */
     void systemSleep(void);
 
-#if defined(ARDUINO_ARCH_SAMD)
+#if defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_SAMD_ZERO)
     /**
      * @brief A watch-dog implementation to use to reboot the system in case of
      * lock-ups
@@ -1029,7 +1030,8 @@ class Logger {
     /**
      * @brief An internal reference to the current filename
      */
-    String _fileName;
+    String _fileName = "";
+    // ^^ Initialize with no file name
 
     /**
      * @brief Check if the SD card is available and ready to write to.
