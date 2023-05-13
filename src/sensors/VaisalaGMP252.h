@@ -67,7 +67,7 @@
  */
 #define GMP252_WARM_UP_TIME_MS 4000
 /**
- * @brief Sensor::_stabilizationTime_ms; GMP252 is stable after 120s. TODO Make it 20 min?
+ * @brief Sensor::_stabilizationTime_ms; GMP252 is stable after 120s. Use 840000
  *
  * warmup+stabilization > 120 s for consecutive readings to give different
  * results
