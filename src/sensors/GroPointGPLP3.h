@@ -249,10 +249,10 @@ class GroPointGPLP3_Moist : public Variable {
      */
     GroPointGPLP3_Moist(const uint8_t sensorVarNum)
         : Variable(gplp3ClampMoistIndex(sensorVarNum),
+                   (uint8_t)GPLP3_MOIST_RESOLUTION,
                    GPLP3_MOIST_VAR_NAME,
                    GPLP3_MOIST_UNIT_NAME,
                    GPLP3_MOIST_DEFAULT_CODE) {}
-
     /**
      * @brief Destroy the GroPointGPLP3_Moist object - no action needed.
      */
@@ -307,6 +307,7 @@ class GroPointGPLP3_Temp : public Variable {
      */
     GroPointGPLP3_Temp(const uint8_t sensorVarNum)
         : Variable(gplp3ClampTempIndex(sensorVarNum),
+                   (uint8_t)GPLP3_TEMP_RESOLUTION,
                    GPLP3_TEMP_VAR_NAME,
                    GPLP3_TEMP_UNIT_NAME,
                    GPLP3_TEMP_DEFAULT_CODE) {}
