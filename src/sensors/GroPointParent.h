@@ -27,6 +27,7 @@
  *
  * This library currently supports the following [GroPoint](https://www.gropoint.com) sensors:
  * - [GroPoint Profile GPLP-8](https://www.gropoint.com/products/soil-sensors/gropoint-profile), 8-Segment Soil Moisture & Temperature Profiling Probe
+ * - [GroPoint Profile GPLP-3](https://www.gropoint.com/products/soil-sensors/gropoint-profile), 3-Segment Soil Moisture & Temperature Profiling Probe
  *     - [GroPoint Profile User Manual](https://www.gropoint.com/s/2625-N-T-GroPoint-Profile-User-Manual-V113.pdf), including Modbus Instructions.
  *     - [GroPoint Profile Technical Info](https://www.gropoint.com/s/GroPoint-Profile-Technical-Info.pdf)
  *     - [Class Documentation](@ref sensor_gplp8)

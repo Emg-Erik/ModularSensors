@@ -64,7 +64,7 @@
  */
 /**@{*/
 /// @brief Sensor::_numReturnedValues; the GPLP3 can report 3 values.
-#define GPLP3_NUM_VARIABLES 21
+#define GPLP3_NUM_VARIABLES 9
 /// @brief Sensor::_incCalcValues; we don't calculate any additional values.
 #define GPLP3_INC_CALC_VARIABLES 0
 /**@}*/
@@ -140,9 +140,17 @@
 #define GPLP3_TEMP_DEFAULT_CODE "GPLP3Temp"
 /**@}*/
 
-// Clamp helpers for GPLP-3 segment indices
-static inline uint8_t gplp3ClampMoistIndex(uint8_t n) { return (n < 1 || n > 3) ? 1 : n; }
-static inline uint8_t gplp3ClampTempIndex(uint8_t n)  { return (n < 1 || n > 6) ? 1 : n; }
+// Map user "segment numbers" to *0-based* variable indices that match GroPointParent
+// Moist segments: 1..3  -> indices 0..2
+static inline uint8_t gplp3IndexMoist(uint8_t seg) {
+  if (seg < 1 || seg > 3) seg = 1;
+  return (uint8_t)(seg - 1);
+}
+// Temp segments: 1..6   -> indices 3..8 (after the 3 moisture slots)
+static inline uint8_t gplp3IndexTemp(uint8_t seg) {
+  if (seg < 1 || seg > 6) seg = 1;
+  return (uint8_t)(3 + (seg - 1));
+}
 
 /* clang-format off */
 /**
@@ -226,12 +234,12 @@ class GroPointGPLP3_Moist : public Variable {
      * @param varCode A short code to help identify the variable in files;
      * optional with a default value of "GPLP3Moist".
      */
-    explicit GroPointGPLP3_Moist(GroPointGPLP3* parentSense,
-                                 const uint8_t  sensorVarNum,
-                                 const char*    uuid = "",
-                                 const char* varCode = GPLP3_MOIST_DEFAULT_CODE)
+     explicit GroPointGPLP3_Moist(GroPointGPLP3* parentSense,
+                                const uint8_t  sensorVarNum,
+                                const char*    uuid = "",
+                                const char* varCode = GPLP3_MOIST_DEFAULT_CODE)
         : Variable(parentSense,
-                   gplp3ClampMoistIndex(sensorVarNum),
+                   gplp3IndexMoist(sensorVarNum),
                    (uint8_t)GPLP3_MOIST_RESOLUTION,
                    GPLP3_MOIST_VAR_NAME,
                    GPLP3_MOIST_UNIT_NAME,
@@ -247,8 +255,9 @@ class GroPointGPLP3_Moist : public Variable {
      * @note This must be tied with a parent GroPointGPLP3 before it can be
      * used.
      */
+    
     GroPointGPLP3_Moist(const uint8_t sensorVarNum)
-        : Variable(gplp3ClampMoistIndex(sensorVarNum),
+        : Variable(gplp3IndexMoist(sensorVarNum),
                    (uint8_t)GPLP3_MOIST_RESOLUTION,
                    GPLP3_MOIST_VAR_NAME,
                    GPLP3_MOIST_UNIT_NAME,
@@ -285,11 +294,11 @@ class GroPointGPLP3_Temp : public Variable {
      * optional with a default value of "GPLP3Temp".
      */
     explicit GroPointGPLP3_Temp(GroPointGPLP3* parentSense,
-                                const uint8_t  sensorVarNum,
-                                const char*    uuid = "",
-                                const char* varCode = GPLP3_TEMP_DEFAULT_CODE)
+                            const uint8_t  sensorVarNum,
+                            const char*    uuid = "",
+                            const char* varCode = GPLP3_TEMP_DEFAULT_CODE)
         : Variable(parentSense,
-                   gplp3ClampTempIndex(sensorVarNum),
+                   gplp3IndexTemp(sensorVarNum),
                    (uint8_t)GPLP3_TEMP_RESOLUTION,
                    GPLP3_TEMP_VAR_NAME,
                    GPLP3_TEMP_UNIT_NAME,
@@ -306,7 +315,7 @@ class GroPointGPLP3_Temp : public Variable {
      * used.
      */
     GroPointGPLP3_Temp(const uint8_t sensorVarNum)
-        : Variable(gplp3ClampTempIndex(sensorVarNum),
+        : Variable(gplp3IndexTemp(sensorVarNum),
                    (uint8_t)GPLP3_TEMP_RESOLUTION,
                    GPLP3_TEMP_VAR_NAME,
                    GPLP3_TEMP_UNIT_NAME,

@@ -306,8 +306,37 @@ bool GroPointParent::addSingleMeasurementResult(void) {
                 verifyAndAddMeasurementResult(19, T12);
                 verifyAndAddMeasurementResult(20, T13);
 
-
                 break;
+            }
+
+            case GPLP3: {
+                 // --- NEW: GPLP3 (3 moisture + 6 temps) ---
+                 MS_DBG(F("Get Values (GPLP3) from"), getSensorNameAndLocation());
+                 success = _gsensor.getValues(M1, M2, M3, M4, M5, M6, M7, M8);  // driver reads only 3
+                 if (!success || isnan(M1)) M1 = -9999;
+                 if (!success || isnan(M2)) M2 = -9999;
+                 if (!success || isnan(M3)) M3 = -9999;
+             
+                 successT = _gsensor.getTemperatureValues(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13); // driver reads only 6
+                 if (!successT || isnan(T1)) T1 = -9999;
+                 if (!successT || isnan(T2)) T2 = -9999;
+                 if (!successT || isnan(T3)) T3 = -9999;
+                 if (!successT || isnan(T4)) T4 = -9999;
+                 if (!successT || isnan(T5)) T5 = -9999;
+                 if (!successT || isnan(T6)) T6 = -9999;
+             
+                 // Publish only the 9 variables this model actually has
+                 verifyAndAddMeasurementResult(0, M1);
+                 verifyAndAddMeasurementResult(1, M2);
+                 verifyAndAddMeasurementResult(2, M3);
+             
+                 verifyAndAddMeasurementResult(3, T1);
+                 verifyAndAddMeasurementResult(4, T2);
+                 verifyAndAddMeasurementResult(5, T3);
+                 verifyAndAddMeasurementResult(6, T4);
+                 verifyAndAddMeasurementResult(7, T5);
+                 verifyAndAddMeasurementResult(8, T6);
+                 break;
             }
             default: {
                 // Get Values
